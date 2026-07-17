@@ -24,7 +24,7 @@ export default function CartPage() {
     try {
       const { coupon, discount } = await validateCoupon(couponCode, summary.subtotal);
       setDiscount(discount);
-      setAppliedCoupon(coupon.code);
+      setAppliedCoupon((coupon as { code: string }).code);
       toast.success(`Coupon applied! You saved ${formatPrice(discount)}`);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'Invalid coupon');

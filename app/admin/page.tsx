@@ -34,7 +34,7 @@ export default function AdminDashboard() {
         supabase.from('products').select('id', { count: 'exact' }),
       ]);
 
-      const orders = ordersRes.data || [];
+      const orders = (ordersRes.data || []) as Array<{ id: string; order_number: string; total: number; status: string; created_at: string }>;
       const totalSales = orders.reduce((sum, o) => sum + (o.total || 0), 0);
       const thisMonth = new Date();
       thisMonth.setDate(1);
@@ -48,7 +48,7 @@ export default function AdminDashboard() {
         revenueThisMonth: monthOrders.reduce((sum, o) => sum + (o.total || 0), 0),
         ordersThisMonth: monthOrders.length,
       });
-      setRecentOrders(orders.slice(0, 5) as typeof recentOrders);
+      setRecentOrders(orders.slice(0, 5));
       setLoading(false);
     };
     fetchStats();

@@ -2,8 +2,11 @@ import { createClient } from '@/lib/supabase/client';
 import type { Cart, CartItem, CartSummary } from '@/types';
 import { SHIPPING_RATES, TAX_RATE } from '@/lib/utils';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySupabase = any;
+
 export async function getOrCreateCart(userId?: string): Promise<Cart> {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
 
   if (userId) {
     const { data } = await supabase
@@ -18,20 +21,20 @@ export async function getOrCreateCart(userId?: string): Promise<Cart> {
       .insert({ user_id: userId })
       .select()
       .single();
-    return { ...newCart, items: [] } as unknown as Cart;
+    return { ...(newCart as object), items: [] } as unknown as Cart;
   }
 
   return { id: 'guest', items: [] };
 }
 
 export async function addToCart(cartId: string, productId: string, variantId?: string, quantity = 1) {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const { data: existing } = await supabase
     .from('cart_items')
     .select('*')
     .eq('cart_id', cartId)
     .eq('product_id', productId)
-    .eq('variant_id', variantId || null)
+    .eq('variant_id', variantId ?? '')
     .single();
 
   if (existing) {
@@ -43,13 +46,13 @@ export async function addToCart(cartId: string, productId: string, variantId?: s
   } else {
     const { error } = await supabase
       .from('cart_items')
-      .insert({ cart_id: cartId, product_id: productId, variant_id: variantId, quantity });
+      .insert({ cart_id: cartId, product_id: productId, variant_id: variantId ?? null, quantity });
     if (error) throw error;
   }
 }
 
 export async function updateCartItem(itemId: string, quantity: number) {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   if (quantity <= 0) {
     const { error } = await supabase.from('cart_items').delete().eq('id', itemId);
     if (error) throw error;
@@ -60,13 +63,13 @@ export async function updateCartItem(itemId: string, quantity: number) {
 }
 
 export async function removeFromCart(itemId: string) {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const { error } = await supabase.from('cart_items').delete().eq('id', itemId);
   if (error) throw error;
 }
 
 export async function clearCart(cartId: string) {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const { error } = await supabase.from('cart_items').delete().eq('cart_id', cartId);
   if (error) throw error;
 }
@@ -87,7 +90,7 @@ export function calculateCartSummary(items: CartItem[], shippingMethod = 'standa
 }
 
 export async function validateCoupon(code: string, subtotal: number) {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const { data, error } = await supabase
     .from('coupons')
     .select('*')

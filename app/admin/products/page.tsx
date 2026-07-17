@@ -54,8 +54,9 @@ export default function AdminProductsPage() {
   };
 
   const handleToggleStatus = async (id: string, currentStatus: string) => {
-    const supabase = createClient();
-    const newStatus = (currentStatus === 'active' ? 'inactive' : 'active') as 'active' | 'inactive';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const supabase = createClient() as any;
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
     await supabase.from('products').update({ status: newStatus }).eq('id', id);
     toast.success(`Product ${newStatus}`);
     refetch();

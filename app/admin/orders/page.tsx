@@ -21,12 +21,13 @@ export default function AdminOrdersPage() {
     const supabase = createClient();
     const { data } = await supabase
       .from('orders')
-      .select('*, items:order_items(*), profile:profiles(full_name, email)')
+      .select('*, items:order_items(*), profile:profiles(full_name, email)' as string)
       .order('created_at', { ascending: false });
     setOrders((data as typeof orders) || []);
     setLoading(false);
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchOrders(); }, []);
 
   const handleStatusChange = async (orderId: string, status: Order['status']) => {

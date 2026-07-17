@@ -28,7 +28,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   const images = product.images || [];
   const sizes = [...new Set(product.variants?.map(v => v.size?.code).filter(Boolean))];
   const colors = product.variants?.reduce((acc, v) => {
-    if (v.color && !acc.find(c => c.id === v.color!.id)) acc.push(v.color);
+    if (v.color && !acc.find(c => c?.id === v.color!.id)) acc.push(v.color);
     return acc;
   }, [] as NonNullable<typeof product.variants>[0]['color'][]);
 

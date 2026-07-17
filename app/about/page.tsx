@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { motion } from 'framer-motion';
 import { Award, Users, Globe, Heart } from 'lucide-react';
 
 export const metadata: Metadata = {

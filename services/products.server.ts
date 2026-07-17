@@ -1,8 +1,11 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Product } from '@/types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySupabase = any;
+
 export async function getFeaturedProducts(): Promise<Product[]> {
-  const supabase = await createClient();
+  const supabase = (await createClient()) as AnySupabase;
   const { data } = await supabase
     .from('products')
     .select('*, images:product_images(*)')
@@ -14,7 +17,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
 }
 
 export async function getNewArrivals(): Promise<Product[]> {
-  const supabase = await createClient();
+  const supabase = (await createClient()) as AnySupabase;
   const { data } = await supabase
     .from('products')
     .select('*, images:product_images(*)')
@@ -26,7 +29,7 @@ export async function getNewArrivals(): Promise<Product[]> {
 }
 
 export async function getBestSellers(): Promise<Product[]> {
-  const supabase = await createClient();
+  const supabase = (await createClient()) as AnySupabase;
   const { data } = await supabase
     .from('products')
     .select('*, images:product_images(*)')
@@ -38,15 +41,10 @@ export async function getBestSellers(): Promise<Product[]> {
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  const supabase = await createClient();
+  const supabase = (await createClient()) as AnySupabase;
   const { data, error } = await supabase
     .from('products')
-    .select(`
-      *,
-      category:categories(*),
-      images:product_images(*),
-      variants:product_variants(*, size:sizes(*), color:colors(*))
-    `)
+    .select(`*, category:categories(*), images:product_images(*), variants:product_variants(*, size:sizes(*), color:colors(*))`)
     .eq('slug', slug)
     .single();
   if (error) return null;
@@ -55,7 +53,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 }
 
 export async function getRelatedProducts(productId: string, categoryId: string): Promise<Product[]> {
-  const supabase = await createClient();
+  const supabase = (await createClient()) as AnySupabase;
   const { data } = await supabase
     .from('products')
     .select('*, images:product_images(*)')

@@ -187,6 +187,176 @@ export interface Database {
           notes?: string | null;
         };
       };
+      order_items: {
+        Row: {
+          id: string;
+          order_id: string;
+          product_id: string;
+          variant_id: string | null;
+          product_name: string;
+          product_image: string | null;
+          size: string | null;
+          color: string | null;
+          quantity: number;
+          unit_price: number;
+          total_price: number;
+        };
+        Insert: {
+          order_id: string;
+          product_id: string;
+          variant_id?: string | null;
+          product_name: string;
+          product_image?: string | null;
+          size?: string | null;
+          color?: string | null;
+          quantity: number;
+          unit_price: number;
+          total_price: number;
+        };
+        Update: Partial<Database['public']['Tables']['order_items']['Insert']>;
+      };
+      payments: {
+        Row: {
+          id: string;
+          order_id: string;
+          method: 'cash_on_delivery' | 'credit_card' | 'mobile_money';
+          status: 'pending' | 'paid' | 'failed' | 'refunded';
+          amount: number;
+          transaction_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          order_id: string;
+          method: 'cash_on_delivery' | 'credit_card' | 'mobile_money';
+          status?: 'pending' | 'paid' | 'failed' | 'refunded';
+          amount: number;
+          transaction_id?: string | null;
+        };
+        Update: Partial<Database['public']['Tables']['payments']['Insert']>;
+      };
+      carts: {
+        Row: { id: string; user_id: string | null; created_at: string; updated_at: string };
+        Insert: { user_id?: string | null };
+        Update: { user_id?: string | null };
+      };
+      cart_items: {
+        Row: {
+          id: string;
+          cart_id: string;
+          product_id: string;
+          variant_id: string | null;
+          quantity: number;
+        };
+        Insert: {
+          cart_id: string;
+          product_id: string;
+          variant_id?: string | null;
+          quantity?: number;
+        };
+        Update: { quantity?: number };
+      };
+      wishlists: {
+        Row: { id: string; user_id: string; created_at: string };
+        Insert: { user_id: string };
+        Update: { user_id?: string };
+      };
+      wishlist_items: {
+        Row: { id: string; wishlist_id: string; product_id: string; added_at: string };
+        Insert: { wishlist_id: string; product_id: string };
+        Update: { wishlist_id?: string; product_id?: string };
+      };
+      sizes: {
+        Row: { id: string; name: string; code: string; sort_order: number };
+        Insert: { name: string; code: string; sort_order?: number };
+        Update: { name?: string; code?: string; sort_order?: number };
+      };
+      colors: {
+        Row: { id: string; name: string; hex_code: string; sort_order: number };
+        Insert: { name: string; hex_code: string; sort_order?: number };
+        Update: { name?: string; hex_code?: string; sort_order?: number };
+      };
+      product_variants: {
+        Row: {
+          id: string;
+          product_id: string;
+          size_id: string | null;
+          color_id: string | null;
+          sku: string | null;
+          price_modifier: number;
+          stock: number;
+        };
+        Insert: {
+          product_id: string;
+          size_id?: string | null;
+          color_id?: string | null;
+          sku?: string | null;
+          price_modifier?: number;
+          stock?: number;
+        };
+        Update: Partial<Database['public']['Tables']['product_variants']['Insert']>;
+      };
+      coupons: {
+        Row: {
+          id: string;
+          code: string;
+          description: string | null;
+          discount_type: 'percentage' | 'fixed';
+          discount_value: number;
+          min_order_amount: number;
+          max_uses: number | null;
+          used_count: number;
+          is_active: boolean;
+          expires_at: string | null;
+        };
+        Insert: {
+          code: string;
+          discount_type: 'percentage' | 'fixed';
+          discount_value: number;
+          min_order_amount?: number;
+          max_uses?: number | null;
+          is_active?: boolean;
+          expires_at?: string | null;
+        };
+        Update: Partial<Database['public']['Tables']['coupons']['Insert']>;
+      };
+      notifications: {
+        Row: {
+          id: string;
+          user_id: string;
+          type: string;
+          title: string;
+          message: string;
+          is_read: boolean;
+          metadata: Json | null;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          type: string;
+          title: string;
+          message: string;
+          is_read?: boolean;
+          metadata?: Json | null;
+        };
+        Update: { is_read?: boolean };
+      };
+      newsletter: {
+        Row: { id: string; email: string; created_at: string };
+        Insert: { email: string };
+        Update: { email?: string };
+      };
+      contact_messages: {
+        Row: {
+          id: string;
+          name: string;
+          email: string;
+          subject: string;
+          message: string;
+          created_at: string;
+        };
+        Insert: { name: string; email: string; subject: string; message: string };
+        Update: Partial<Database['public']['Tables']['contact_messages']['Insert']>;
+      };
     };
   };
 }

@@ -2,6 +2,9 @@ import { createClient } from '@/lib/supabase/client';
 import type { Order, CheckoutFormData, CartItem } from '@/types';
 import { calculateCartSummary } from './cart';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySupabase = any;
+
 export async function createOrder(
   formData: CheckoutFormData,
   cartItems: CartItem[],
@@ -9,7 +12,7 @@ export async function createOrder(
   couponId?: string,
   discountAmount = 0
 ): Promise<Order> {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const summary = calculateCartSummary(cartItems, formData.shipping_method, discountAmount);
 
   const shippingAddress = {
@@ -33,10 +36,10 @@ export async function createOrder(
       shipping_amount: summary.shipping,
       tax_amount: summary.tax,
       total: summary.total,
-      coupon_id: couponId,
+      coupon_id: couponId ?? null,
       shipping_method: formData.shipping_method,
       shipping_address: shippingAddress,
-      notes: formData.notes,
+      notes: formData.notes ?? null,
     })
     .select()
     .single();
@@ -62,7 +65,7 @@ export async function createOrder(
   await supabase.from('payments').insert({
     order_id: order.id,
     method: formData.payment_method,
-    status: formData.payment_method === 'cash_on_delivery' ? 'pending' : 'pending',
+    status: 'pending',
     amount: summary.total,
   });
 
@@ -70,7 +73,7 @@ export async function createOrder(
 }
 
 export async function getUserOrders(userId: string): Promise<Order[]> {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const { data, error } = await supabase
     .from('orders')
     .select('*, items:order_items(*)')
@@ -81,7 +84,7 @@ export async function getUserOrders(userId: string): Promise<Order[]> {
 }
 
 export async function getOrderById(orderId: string): Promise<Order | null> {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const { data, error } = await supabase
     .from('orders')
     .select('*, items:order_items(*), payment:payments(*)')
@@ -92,7 +95,7 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
 }
 
 export async function getAllOrders(): Promise<Order[]> {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const { data, error } = await supabase
     .from('orders')
     .select('*, items:order_items(*), profile:profiles(full_name, email)')
@@ -102,7 +105,7 @@ export async function getAllOrders(): Promise<Order[]> {
 }
 
 export async function updateOrderStatus(orderId: string, status: Order['status']) {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const { error } = await supabase.from('orders').update({ status }).eq('id', orderId);
   if (error) throw error;
 }

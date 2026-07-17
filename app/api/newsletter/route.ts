@@ -8,7 +8,8 @@ export async function POST(request: NextRequest) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.from('newsletter').upsert({ email }, { onConflict: 'email' });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { error } = await (supabase as any).from('newsletter').upsert({ email }, { onConflict: 'email' });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true, message: 'Subscribed successfully!' });

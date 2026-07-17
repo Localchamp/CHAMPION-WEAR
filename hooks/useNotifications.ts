@@ -29,7 +29,8 @@ export function useNotifications(userId: string | undefined) {
 
   const markAllRead = useCallback(async () => {
     if (!userId) return;
-    await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase as any)
       .from('notifications')
       .update({ is_read: true })
       .eq('user_id', userId)
@@ -38,7 +39,8 @@ export function useNotifications(userId: string | undefined) {
   }, [userId, supabase]);
 
   const markRead = useCallback(async (id: string) => {
-    await supabase.from('notifications').update({ is_read: true }).eq('id', id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase as any).from('notifications').update({ is_read: true }).eq('id', id);
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
   }, [supabase]);
 

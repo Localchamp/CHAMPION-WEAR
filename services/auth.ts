@@ -1,6 +1,9 @@
 import { createClient } from '@/lib/supabase/client';
 import type { Profile } from '@/types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AnySupabase = any;
+
 export async function signUp(email: string, password: string, fullName: string) {
   const supabase = createClient();
   const { data, error } = await supabase.auth.signUp({
@@ -69,7 +72,7 @@ export async function uploadAvatar(userId: string, file: File): Promise<string> 
 }
 
 export async function getWishlist(userId: string) {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const { data } = await supabase
     .from('wishlists')
     .select('*, items:wishlist_items(*, product:products(*, images:product_images(*)))')
@@ -79,7 +82,7 @@ export async function getWishlist(userId: string) {
 }
 
 export async function toggleWishlistItem(userId: string, productId: string) {
-  const supabase = createClient();
+  const supabase = createClient() as AnySupabase;
   const { data: wishlist } = await supabase
     .from('wishlists')
     .select('id')

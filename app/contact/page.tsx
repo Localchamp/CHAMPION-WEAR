@@ -29,9 +29,10 @@ export default function ContactPage() {
   const onSubmit = async (data: FormData) => {
     setLoading(true);
     try {
-      const supabase = createClient();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const supabase = createClient() as any;
       await supabase.from('contact_messages').insert(data);
-      toast.success('Message sent! We\'ll get back to you soon.');
+      toast.success("Message sent! We'll get back to you soon.");
       reset();
     } catch {
       toast.error('Failed to send message. Please try again.');

@@ -8,7 +8,7 @@ export function useSearch() {
   const [results, setResults] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     if (!query.trim()) {
