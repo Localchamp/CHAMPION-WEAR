@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 4%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 4%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 4%;
+    --primary: 0 0% 4%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 4%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 45 80% 52%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 45 80% 52%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 4%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 45 80% 52%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 45 80% 52%;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply bg-background text-foreground font-inter antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  h1, h2, h3, h4, h5, h6 { @apply font-poppins; }
+}
+
+@layer components {
+  .gold-text {
+    background: linear-gradient(135deg, #d4af37 0%, #f0d060 50%, #b8960c 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass-card {
+    @apply backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl;
+  }
+
+  .glass-card-dark {
+    @apply backdrop-blur-md bg-black/40 border border-white/10 rounded-2xl;
+  }
+
+  .product-card {
+    @apply relative overflow-hidden rounded-2xl bg-card border border-border transition-all duration-300;
+    @apply hover:shadow-2xl hover:-translate-y-1;
+  }
+
+  .btn-gold {
+    @apply bg-gradient-to-r from-champion-gold to-gold-400 text-black font-semibold;
+    @apply hover:from-gold-400 hover:to-champion-gold transition-all duration-300;
+    @apply shadow-lg hover:shadow-gold-400/30;
+  }
+
+  .skeleton {
+    @apply animate-pulse bg-muted rounded-lg;
+  }
+
+  .shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold font-poppins;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { @apply bg-muted; }
+::-webkit-scrollbar-thumb { @apply bg-muted-foreground/30 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-muted-foreground/50; }
+
+/* Page transitions */
+.page-enter { opacity: 0; transform: translateY(8px); }
+.page-enter-active { opacity: 1; transform: translateY(0); transition: all 0.3s ease; }
